@@ -9,16 +9,26 @@ export const useTasks = () => useContext(TaskContext)
 
 export const TaskProvider = ({children}) =>{
 
-    const [tasks, setTask] = useState([{id:uuid(),title:"first task", description:"one task"}]);
+    const [tasks, setTask] = useState([]);
 
-    const createTasks =(title, description) =>{
+    const createTask =(title, description) =>{
         setTask([...tasks,{
             title,description, id:uuid()
         }])
     }
 
+    const updateTask = (id, updatedTask) =>
+    setTask([
+      ...tasks.map((task) =>
+        task.id === id ? { ...task, ...updatedTask } : task
+      ),
+    ]);
+
+    const deleteTask = id => setTask([...tasks.filter(task => task.id !== id)])
+
+
     return(
-        <TaskContext.Provider value ={{tasks, createTasks}} >
+        <TaskContext.Provider value ={{tasks, createTask, updateTask,deleteTask}} >
             {children}
         </TaskContext.Provider>
     
